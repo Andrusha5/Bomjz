@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Симулятор Бомжа</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none;font-family:Arial,sans-serif}
+html,body{width:100%;height:100%;overflow:hidden;background:#08090d;color:#fff;touch-action:manipulation}
+#intro{position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .8s}
+#intro b{font-size:38px;letter-spacing:4px;color:#ffb347;animation:introPulse 1.5s infinite}
+@keyframes introPulse{50%{transform:scale(1.06);opacity:.8}}
+#game{position:relative;width:100%;max-width:480px;height:100%;margin:auto;display:flex;flex-direction:column;overflow:hidden;background:url('bg_1.jpg') center/cover no-repeat;transition:background-image 0.8s ease-in-out}
+#header{position:relative;z-index:5;padding:13px 14px 7px;background:linear-gradient(#000c,#0000);height:155px}
+.top{display:flex;align-items:center;justify-content:flex-start;min-height:42px}
+.level{display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid #ffffff33;border-radius:25px;background:#0009;font-weight:bold;color:#ffab50}
+.bar{position:relative;width:80px;height:14px;border-radius:20px;background:#17202c;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#20db72,#91f2ae);transition:width .3s}
+.percent{position:absolute;inset:0;text-align:center;font-size:9px;line-height:14px;text-shadow:1px 1px #000;color:#ffffff;font-weight:bold}
+#claim{display:none;border:0;border-radius:25px;padding:8px 15px;background:linear-gradient(135deg,#18ce6a,#8af2a8);color:#fff;font-weight:bold;box-shadow:0 0 18px #25dc79;animation:pulse 1.4s infinite}@keyframes pulse{50%{transform:scale(1.06)}}
+
+/* Круглая кнопка настроек сверху (без смещений) */
+#settingsBtn{position:absolute;top:13px;right:14px;width:42px;height:42px;border-radius:50%;border:2px solid #ff9f43a0;background:#111827;cursor:pointer;padding:0;margin:0;overflow:hidden;z-index:15;box-shadow:0 0 12px rgba(255,159,67,0.4);display:block;outline:none}
+#settingsBtn img{width:100%;height:100%;object-fit:cover;display:block;margin:0;padding:0;border-radius:50%;pointer-events:none}
+#settingsBtn:active{transform:scale(0.9)}
+
+.balance{position:absolute;left:50%;top:96px;transform:translateX(-50%);font-size:32px;font-weight:900;color:#ffffff;text-shadow:0 0 12px rgba(255,208,100,0.5),0 3px 12px #d87924;width:100%;text-align:center;white-space:nowrap;transition:top 0.2s;z-index:4}
+.stats{position:absolute;top:54px;right:14px;display:flex;flex-direction:column;gap:4px;font-size:10px;z-index:4}
+.stat{padding:3px 7px;border-radius:10px;background:#0009;color:#aebbd0;border:1px solid #ffffff12;white-space:nowrap;text-align:right}
+.stat strong{color:#fff}
+
+/* Область клика с отключением задержек тач-скрина */
+#clickArea{position:relative;flex:1;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;touch-action:none}
+#clickArea:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(#0000,#000b);pointer-events:none}
+#characterBox{height:62vh;max-height:650px;display:flex;align-items:flex-end;justify-content:center;z-index:2;pointer-events:none;transform:translateY(-18px)}
+
+/* Плавная фоновая анимация дыхания персонажа */
+@keyframes breathe {
+  0% { transform: scale(1.0); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1.0); }
+}
+#character{height:100%;width:auto;object-fit:contain;filter:drop-shadow(0 8px 14px #000b);transform-origin:bottom center;animation:breathe 3.5s ease-in-out infinite;will-change:transform}
+
+.money{position:absolute;color:#22dc77;font-size:26px;font-weight:900;pointer-events:none;z-index:10;text-shadow:2px 2px 4px #000;animation:moneyUp .8s forwards;will-change:transform,opacity}@keyframes moneyUp{to{transform:translateY(-120px) scale(1.2);opacity:0}}
+#safeButton{position:absolute;left:16px;top:165px;z-index:12;width:62px;height:62px;border-radius:50%;border:3px solid #fff;background:#111827;box-shadow:0 0 20px #ff983b99;cursor:pointer;padding:0;overflow:hidden}
+#safeButton:active{transform:scale(.92)}
+#bottom{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:9px;background:#0d1320f2;border-top:2px solid #ff9f4333;z-index:20}
+.nav{min-width:0;aspect-ratio:1;border-radius:14px;border:1px solid #35415a;background:linear-gradient(145deg,#202a40,#111827);color:#aebbd0;font-size:9px;font-weight:bold}.nav span{display:block;font-size:21px;margin-bottom:3px}.nav:active{transform:scale(.93);border-color:#ffab50}
+.panel{position:absolute;inset:0;z-index:50;background:#090c13f8;transform:translateY(100%);transition:transform .35s;display:flex;flex-direction:column}.panel.open{transform:translateY(0)}
+.panelHead{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#111827;border-bottom:2px solid #ff9f4344}.back{border:0;border-radius:11px;padding:9px 14px;background:#ff4e61;color:#fff;font-weight:bold}.headInfo{text-align:right}.headLvl{display:block;color:#ffab50;font-size:12px;font-weight:bold}.headMoney{font-size:18px;font-weight:bold}
+.panelBody{overflow-y:auto;flex:1;padding:15px} .title{text-align:center;color:#ffd174;font-size:17px;font-weight:bold;margin-bottom:15px;text-transform:uppercase}.list{display:flex;flex-direction:column;gap:11px}
+.card{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:13px;border-radius:16px;border:1px solid #ffae5030;background:#ffffff08}.card.disabled{border-color:#ffffff16}.info{display:flex;align-items:center;gap:9px;min-width:0;flex:1}.logo{width:43px;height:43px;min-width:43px;border-radius:11px;object-fit:cover;background:#29344a;display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden}.logo img{width:100%;height:100%;object-fit:cover}.text{min-width:0}.name{display:block;font-size:14px;font-weight:bold;white-space:normal}.desc{display:block;margin-top:4px;font-size:11px;color:#a8b5c8}.buy{border:0;border-radius:12px;padding:10px 12px;background:linear-gradient(135deg,#ff9f43,#ff6681);color:#fff;font-size:11px;font-weight:bold;white-space:nowrap}.disabled .buy{background:#273043;color:#a0acc0}.owned{color:#29dc78;font-weight:bold}
+.statsRow{display:flex;justify-content:space-between;padding:13px 3px;border-bottom:1px solid #ffffff12;font-size:14px}.statsRow span:first-child{color:#9aaac0}
+.setting{padding:15px;border:1px solid #ffffff14;border-radius:15px;background:#ffffff08;margin-bottom:15px}.setting label{display:flex;justify-content:space-between;margin-bottom:12px}.slider{width:100%;accent-color:#ff9f43}
+.modal{position:absolute;inset:0;z-index:100;background:#000d;display:none;align-items:center;justify-content:center}.modal.show{display:flex}
+.modalBox{width:85%;max-width:360px;padding:25px;border:2px solid #ff9f43;border-radius:20px;background:#111827;text-align:center;box-shadow:0 0 25px rgba(255,159,67,0.3)}
+.modalBox h2{color:#ffb347;margin-bottom:15px}
+.modalBox p{line-height:1.6;color:#dce4f0}
+.modalBox button{border:0;border-radius:12px;padding:12px 22px;margin-top:18px;background:linear-gradient(135deg,#ff9f43,#ff6681);color:#fff;font-weight:bold;cursor:pointer;width:100%}
+.modalBox button.disabled {background:#273043 !important;color:#a0acc0 !important;cursor:not-allowed !important;box-shadow:none !important;pointer-events:none !important}
+.close{background:#293449!important}
+.safe-stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #ffffff0a;font-size:14px}
+.safe-stat-row span{color:#aebbd0}
+.safe-stat-row b{color:#fff}
+.safe-bar-container{position:relative;width:100%;height:20px;background:#17202c;border-radius:10px;overflow:hidden;margin:15px 0;border:1px solid #ff9f4333}
+.safe-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd174,#29dc78);transition:width .3s}
+.safe-pct-text{position:absolute;inset:0;text-align:center;font-size:11px;line-height:20px;font-weight:bold;color:#fff;text-shadow:1px 1px 2px #000}
+
+/* Стилизация для вкладки Скинов */
+.skin-logo{width:46px;height:46px;min-width:46px;border-radius:11px;background:#29344a;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid #ffffff12}
+.skin-logo img{width:100%;height:100%;object-fit:cover;object-position:center 15%}
+.skin-select-container{display:flex;align-items:center;gap:7px;justify-content:flex-end}
+.skin-radio{width:20px;height:20px;border-radius:50%;border:2px solid #5a6e85;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background-color .2s}
+.skin-radio.active{border-color:#29dc78}
+.skin-radio-dot{width:10px;height:10px;border-radius:50%;background-color:#29dc78;transform:scale(0);transition:transform .2s}
+.skin-radio.active .skin-radio-dot{transform:scale(1)}
+</style>
+</head>
+<body>
+<div id="intro"><b>BestGame</b></div>
+<div id="game">
+<header id="header">
+  <div class="top">
+    <div id="level" class="level">
+      <span id="lvl">1</span>
+      <div class="bar">
+        <div id="fill" class="fill"></div>
+        <span id="pct" class="percent">0%</span>
+      </div>
+      <span id="next">2</span>
+    </div>
+    <button id="claim" onclick="openReward()">ЗАБРАТЬ</button>
+  </div>
+  
+  <!-- Кнопка Настроек в правом верхнем углу -->
+  <button id="settingsBtn" onclick="openPanel('settingsPanel')">
+    <img src="settings.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><rect width=\'64\' height=\'64\' fill=\'%23111827\'/><text y=\'52\' x=\'10\' font-size=\'46\'>⚙️</text></svg>'" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </button>
+
+  <div id="balance" class="balance">0 ₽</div>
+  <div class="stats">
+    <div class="stat">Тап: <strong id="tapValue">+1 ₽</strong></div>
+    <div class="stat">В секунду: <strong id="hourValue">0 ₽/сек</strong></div>
+  </div>
+</header>
+<button id="safeButton" onclick="openSafe()">
+  <img id="safeImg" src="safe.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><text y=\'50\' x=\'10\' font-size=\'45\'>💰</text></svg>'" style="width:100%;height:100%;object-fit:cover;display:block;">
+</button>
+<main id="clickArea">
+  <div id="characterBox">
+    <img id="character" src="bomzh_1.png" alt="">
+  </div>
+</main>
+<nav id="bottom">
+  <button class="nav" onclick="openPanel('tapPanel')"><span>👆</span>ТАП</button>
+  <button class="nav" onclick="openPanel('businessPanel')"><span>💼</span>БИЗНЕС</button>
+  <button class="nav" onclick="openPanel('companyPanel')"><span>🏢</span>КОМПАНИЯ</button>
+  <button class="nav" onclick="openPanel('statusPanel')"><span>📈</span>АКЦИИ</button>
+  <button class="nav" onclick="openPanel('skinsPanel')"><span>🎭</span>СКИНЫ</button>
+</nav>
+
+<section id="tapPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="closePanels()">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="tapHeadLvl"></span>
+      <span class="headMoney" id="tapHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title">Прокачка тапов</div>
+    <div id="tapList" class="list"></div>
+  </div>
+</section>
+
+<section id="businessPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="closePanels()">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="businessHeadLvl"></span>
+      <span class="headMoney" id="businessHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title">Бизнес</div>
+    <div id="businessList" class="list"></div>
+  </div>
+</section>
+
+<section id="companyPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="closePanels()">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="companyHeadLvl"></span>
+      <span class="headMoney" id="companyHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title">Компании</div>
+    <div id="companyList" class="list"></div>
+  </div>
+</section>
+
+<section id="statusPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="closePanels()">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="statusHeadLvl"></span>
+      <span class="headMoney" id="statusHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title">Акции</div>
+    <div style="text-align: center; padding: 40px 20px; color: #aebbd0;">
+      <span style="font-size: 54px; display: block; margin-bottom: 20px;">📈</span>
+      <p style="font-size: 18px; font-weight: bold; color: #ffd174; margin-bottom: 10px;">Раздел в разработке</p>
+      <p style="font-size: 13px; line-height: 1.5; max-width: 280px; margin: 0 auto;">Скоро здесь появится полноценная биржа акций! Вы сможете инвестировать свои рубли в ценные бумаги и получать огромную прибыль.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Вкладка Скины -->
+<section id="skinsPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="closePanels()">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="skinsHeadLvl"></span>
+      <span class="headMoney" id="skinsHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title">Скины Персонажа</div>
+    <div id="skinsList" class="list"></div>
+  </div>
+</section>
+
+<section id="settingsPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="closePanels()">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="settingsHeadLvl"></span>
+      <span class="headMoney" id="settingsHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title">Настройки</div>
+    <div class="setting">
+      <label>🔊 Эффекты <b id="sfxText">60%</b></label>
+      <input id="sfx" class="slider" type="range" min="0" max="100" value="60">
+    </div>
+    <div class="setting">
+      <label>🎵 Музыка <b id="musicText">40%</b></label>
+      <input id="music" class="slider" type="range" min="0" max="100" value="40">
+    </div>
+  </div>
+</section>
+
+<div id="safeModal" class="modal">
+  <div class="modalBox">
+    <h2>💰 Сейф Компаний</h2>
+    
+    <div class="safe-stat-row">
+      <span>Доход компаний:</span>
+      <b id="safeHourly" style="color: #ffd174;">0 ₽/ч</b>
+    </div>
+    
+    <div class="safe-stat-row">
+      <span>Накоплено:</span>
+      <b id="safeAmount" style="color: #29dc78;">0 ₽</b>
+    </div>
+    
+    <div class="safe-stat-row" style="border: none;">
+      <span>Лимит сейфа:</span>
+      <b id="safeMaxAmount">100 000 ₽</b>
+    </div>
+
+    <div class="safe-bar-container">
+      <div id="safeBarFill" class="safe-bar-fill"></div>
+      <span id="safePercentText" class="safe-pct-text">0%</span>
+    </div>
+
+    <p id="safeTimer" style="font-size: 12px; color: #aebbd0; margin-top: 10px; line-height: 1.4;"></p>
+    
+    <button id="collectSafeBtn" onclick="collectSafe()">Забрать деньги</button>
+    <button class="close" onclick="closeModal('safeModal')">Закрыть</button>
+  </div>
+</div>
+
+<div id="rewardModal" class="modal">
+  <div class="modalBox">
+    <h2>🎉 Новый уровень!</h2>
+    <p id="rewardText"></p>
+    <button onclick="claimReward()">Забрать бонус</button>
+  </div>
+</div>
+</div>
+
+<script>
+'use strict';
+var KEY = 'bestgame_complete_v16';
+var POWERS = [1, 2, 3, 5, 8, 11, 16, 22, 33, 67, 123, 199, 297, 999, 1757, 6767, 15903];
+var COSTS = [175, 333, 1200, 1700];
+
+var businesses = [
+ {id:'bottle', name:'Сбор бутылок', cost:160, rps:5, icon:'🍾', owned:0},
+ {id:'cardboard', name:'Сбор картона', cost:800, rps:26, icon:'📦', owned:0},
+ {id:'gum', name:'Перепродажа жвачки', cost:4650, rps:175, icon:'🍬', owned:0},
+ {id:'beg', name:'Попрошайничество', cost:26600, rps:1100, icon:'🤲', owned:0},
+ {id:'fruit', name:'Фруктовая лавка', cost:173000, rps:6600, icon:'🍎', owned:0},
+ {id:'market', name:'Минимаркет', cost:1200000, rps:44000, icon:'🏪', owned:0},
+ {id:'cars', name:'Автосалон', cost:10640000, rps:374000, icon:'🚗', owned:0},
+ {id:'it', name:'IT компания', cost:80000000, rps:3000000, icon:'💻', owned:0},
+ {id:'crypto', name:'Криптоинвестор', cost:665000000, rps:26000000, icon:'🪙', owned:0},
+ {id:'apps', name:'Разработчик приложений', cost:5320000000, rps:220000000, icon:'📱', owned:0}
+];
+
+// У последних 5 компаний цена увеличена на 40%!
+var rawCompanies = [
+ ['Loda', 6650000, 280600, 'lada.png', '🚗'],
+ ['Nuttola', 8911000, 549000, 'nutella.png', '🍫'],
+ ['Xsioma', 14630000, 951600, 'xiaomi.png', '📱'],
+ ['Mesredec', 29260000, 1464000, 'mercedes.png', '🏎️'],
+ ['BWM', 33250000, 1830000, 'bmw.png', '🏍️'],
+ ['Coka Colo', 59850000, 4026000, 'coca_cola.png', '🥤'],
+ ['Netfelix', 129010000, 6222000, 'netflix.png', '🎬'],
+ ['Янедкс', 207480000, 13420000, 'yandex.png', '🔍'],
+ ['Гыгуль', 470820000, 18458600, 'google.png', '🧭'],
+ ['Aples', 606480000, 29280000, 'apple.png', '🍎'],
+ ['Wilderbis', 1403948000, 42700000, 'wildberries.png', '🛍️'],
+ ['Nosa', 2606800000, 165920000, 'nasa.png', '🚀'],
+ ['Кулойл', 2793000000, 225700000, 'lukoil.png', '⛽'],
+ ['СбарБенк', 3258500000, 270840000, 'sberbank.png', '🏦'],
+ ['Omozon', 4468800000, 458720000, 'amazon.png', '📦']
+];
+
+var companies = [];
+for (var i = 0; i < rawCompanies.length; i++) {
+  var x = rawCompanies[i];
+  companies.push({
+    id: 'company' + i,
+    name: x[0],
+    cost: x[1],
+    rph: x[2],
+    logo: x[3],
+    icon: x[4],
+    bought: false
+  });
+}
+
+// Платные скины UFC (сортировка от самого дешевого к самому дорогому)
+var skins = [
+  {id:'default', name:'Основной скин', cost:0, img:'bomzh_1.png', levelReq:1},
+  {id:'topuria', name:'Илия Топурия', cost:250000000, img:'topuria.png', levelReq:30},
+  {id:'jones', name:'Джон Джонс', cost:540000000, img:'jones.png', levelReq:30},
+  {id:'conor', name:'Конор Макгрегор', cost:890000000, img:'conor.png', levelReq:30},
+  {id:'arman', name:'Арман Царукян', cost:1200000000, img:'arman.png', levelReq:30},
+  {id:'islam', name:'Ислам Махачев', cost:2000000000, img:'islam.png', levelReq:30},
+  {id:'oliveira', name:'Чарльз Оливейра', cost:3300000000, img:'Oliveira.png', levelReq:30},
+  {id:'khabib', name:'Хабиб Нурмагомедов', cost:4500000000, img:'khabib.png', levelReq:30}
+];
+
+var state = {
+  balance: 0,
+  safe: 0,
+  safeAccumulator: 0,
+  safeTimer: 0,
+  lifetime: 0,
+  level: 1,
+  levelClicks: 0,
+  levelClicksNeeded: 200,
+  clickLevel: 0,
+  safeLevel: 0,
+  lastSave: Date.now(),
+  lastSafe: Date.now(),
+  pending: false,
+  pendingLevel: 2,
+  sfx: 0.6,
+  music: 0.4,
+  equippedSkin: 'default',
+  ownedSkins: ['default']
+};
+
+var audio = null, sfxGain = null, musicGain = null;
+var clickBounds = null; // Локальный кэш координат области клика во избежание лагов
+
+function byId(id) {
+  return document.getElementById(id);
+}
+
+// Быстрое обновление координат области клика (вызывается на старте и ресайзе)
+function updateClickBounds() {
+  var area = byId('clickArea');
+  if (area) {
+    clickBounds = area.getBoundingClientRect();
+  }
+}
+
+function fmt(n) {
+  n = Math.floor(Number(n) || 0);
+  if (n >= 1e12) return (n / 1e12).toFixed(2) + ' трлн';
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + ' млрд';
+  if (n >= 1e6) return (n / 1e6).toFixed(2) + ' млн';
+  return n.toLocaleString('ru-RU');
+}
+
+function power(l) {
+  return l < POWERS.length ? POWERS[l] : Math.round(POWERS[POWERS.length - 1] * Math.pow(3.1, l - 16));
+}
+
+function cost(l) {
+  if (l < COSTS.length) return COSTS[l];
+  return Math.max(cost(l - 1) + 500, Math.round(power(l) * 75 * Math.pow(1.12, l - 4)));
+}
+
+function currentLevelReward() {
+  var clicks = state.levelClicksNeeded || 200;
+  return Math.round(clicks * power(state.clickLevel) * 0.15);
+}
+
+function hourly() {
+  var total = 0;
+  for (var i = 0; i < companies.length; i++) {
+    if (companies[i].bought) {
+      total += companies[i].rph;
+    }
+  }
+  return total;
+}
+
+function businessPerSecond() {
+  var total = 0;
+  for (var i = 0; i < businesses.length; i++) {
+    total += (businesses[i].owned || 0) * businesses[i].rps;
+  }
+  return total;
+}
+
+// 50 уровней прокачки сейфа
+function safeCapacity() {
+  var lvl = state.safeLevel || 0;
+  if (lvl <= 25) {
+    return Math.round(100000 * Math.pow(1.485, lvl));
+  } else {
+    var baseVal = Math.round(100000 * Math.pow(1.485, 25));
+    return Math.round(baseVal * Math.pow(1.8, lvl - 25));
+  }
+}
+
+function safeUpgradeCost() {
+  var lvl = state.safeLevel || 0;
+  if (lvl <= 25) {
+    return Math.round(1100000 * Math.pow(1.42, lvl));
+  } else {
+    var baseCost = Math.round(1100000 * Math.pow(1.42, 25));
+    return Math.round(baseCost * Math.pow(1.65, lvl - 25));
+  }
+}
+
+function initAudio() {
+  if (!audio) {
+    var A = window.AudioContext || window.webkitAudioContext;
+    if (!A) return;
+    audio = new A();
+    sfxGain = audio.createGain();
+    sfxGain.gain.value = state.sfx;
+    sfxGain.connect(audio.destination);
+    musicGain = audio.createGain();
+    musicGain.gain.value = state.music * 0.8;
+    musicGain.connect(audio.destination);
+    
+    var o = audio.createOscillator();
+    var g = audio.createGain();
+    o.type = 'triangle';
+    o.frequency.value = 110;
+    g.gain.value = 0.035;
+    o.connect(g);
+    g.connect(musicGain);
+    o.start();
+    
+    setInterval(function() {
+      if (!audio || !musicGain) return;
+      var notes = [220, 261.63, 329.63, 392, 440];
+      var n = notes[Math.floor(Math.random() * 5)];
+      var x = audio.createOscillator();
+      var y = audio.createGain();
+      x.type = 'sine';
+      x.frequency.value = n;
+      y.gain.setValueAtTime(0, audio.currentTime);
+      y.gain.linearRampToValueAtTime(0.1, audio.currentTime + 1);
+      y.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 3);
+      x.connect(y);
+      y.connect(musicGain);
+      x.start();
+      x.stop(audio.currentTime + 3.1);
+    }, 3500);
+  }
+  if (audio.state === 'suspended') {
+    audio.resume();
+  }
+}
+
+function sound(f, d, type) {
+  f = f || 600;
+  d = d || 0.08;
+  type = type || 'sine';
+  try {
+    initAudio();
+    var o = audio.createOscillator();
+    var g = audio.createGain();
+    o.type = type;
+    o.frequency.value = f;
+    o.connect(g);
+    g.connect(sfxGain);
+    g.gain.setValueAtTime(0.06, audio.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + d);
+    o.start();
+    o.stop(audio.currentTime + d);
+  } catch (e) {}
+}
+
+function save() {
+  state.lastSave = Date.now();
+  var saveData = {
+    state: state,
+    businesses: businesses,
+    companies: companies
+  };
+  localStorage.setItem(KEY, JSON.stringify(saveData));
+}
+
+function load() {
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) {
+      var x = JSON.parse(raw);
+      if (x) {
+        if (x.state) {
+          for (var key in x.state) {
+            if (x.state.hasOwnProperty(key)) {
+              state[key] = x.state[key];
+            }
+          }
+        }
+        if (x.businesses) {
+          for (var i = 0; i < x.businesses.length; i++) {
+            var bSaved = x.businesses[i];
+            for (var j = 0; j < businesses.length; j++) {
+              if (businesses[j].id === bSaved.id) {
+                businesses[j].owned = bSaved.owned || 0;
+                businesses[j].cost = bSaved.cost || businesses[j].cost;
+              }
+            }
+          }
+        }
+        if (x.companies) {
+          for (var i = 0; i < x.companies.length; i++) {
+            var cSaved = x.companies[i];
+            for (var j = 0; j < companies.length; j++) {
+              if (companies[j].id === cSaved.id) {
+                companies[j].bought = !!cSaved.bought;
+              }
+            }
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn(e);
+  }
+  updateOffline();
+  state.clickLevel = Number(state.clickLevel) || 0;
+  state.safeLevel = Math.min(50, Number(state.safeLevel) || 0);
+  state.safeAccumulator = Number(state.safeAccumulator) || 0;
+  state.safeTimer = Number(state.safeTimer) || 0;
+  state.equippedSkin = state.equippedSkin || 'default';
+  state.ownedSkins = state.ownedSkins || ['default'];
+  
+  if (state.levelClicks === undefined || state.levelClicks === null) {
+    state.levelClicks = 0;
+  }
+  if (!state.levelClicksNeeded) {
+    state.levelClicksNeeded = Math.floor(Math.random() * 101) + 170;
+  }
+}
+
+function updateOffline() {
+  var h = hourly();
+  var now = Date.now();
+  if (h > 0) {
+    var secondsPassed = Math.max(0, (now - state.lastSafe) / 1000);
+    if (secondsPassed > 0) {
+      var offlineEarned = (secondsPassed / 3600) * h;
+      var remainingSeconds = Math.floor(secondsPassed % 120);
+      state.safeTimer = (state.safeTimer || 0) + remainingSeconds;
+      if (state.safeTimer >= 120) {
+        state.safeTimer = state.safeTimer % 120;
+      }
+      var space = safeCapacity() - state.safe;
+      var toAdd = Math.min(space, offlineEarned);
+      state.safe += toAdd;
+    }
+  }
+  state.lastSafe = now;
+}
+
+function tick() {
+  var now = Date.now();
+  var b = businessPerSecond();
+  state.balance += b;
+  
+  var h = hourly();
+  if (h > 0) {
+    var earnedPerSecond = h / 3600;
+    state.safeAccumulator = (Number(state.safeAccumulator) || 0) + earnedPerSecond;
+  }
+  
+  state.safeTimer = (Number(state.safeTimer) || 0) + 1;
+  if (state.safeTimer >= 120) {
+    state.safeTimer = 0;
+    if (state.safeAccumulator > 0) {
+      var space = safeCapacity() - state.safe;
+      var toAdd = Math.min(space, state.safeAccumulator);
+      state.safe += toAdd;
+      state.safeAccumulator = 0;
+    }
+  }
+  
+  state.lastSafe = now;
+  
+  if (!state.pending && state.levelClicks >= state.levelClicksNeeded) {
+    state.pending = true;
+    state.pendingLevel = state.level + 1;
+  }
+  render();
+}
+
+function clickGame(e) {
+  initAudio();
+  var added = power(state.clickLevel);
+  state.balance += added;
+  
+  if (!state.pending) {
+    state.levelClicks = (state.levelClicks || 0) + 1;
+    if (state.levelClicks >= state.levelClicksNeeded) {
+      state.pending = true;
+      state.pendingLevel = state.level + 1;
+    }
+  }
+  
+  sound(600, 0.08, 'sine');
+  
+  if (!clickBounds) {
+    updateClickBounds();
+  }
+  
+  // Абсолютно мгновенный расчет координат без лагов
+  var xPos = e.clientX - (clickBounds ? clickBounds.left : 0);
+  var yPos = e.clientY - (clickBounds ? clickBounds.top : 0);
+  
+  var t = document.createElement('div');
+  t.className = 'money';
+  t.textContent = '+' + fmt(added) + ' ₽';
+  t.style.left = (xPos - 20) + 'px';
+  t.style.top = (yPos - 20) + 'px';
+  byId('clickArea').appendChild(t);
+  
+  setTimeout(function() {
+    t.remove();
+  }, 800);
+  
+  render();
+}
+
+function updateVisuals() {
+  var lvl = state.level;
+  
+  // Таблица смены фонов
+  var bgNum = 1;
+  if (lvl >= 100) bgNum = 11;
+  else if (lvl >= 90) bgNum = 10;
+  else if (lvl >= 80) bgNum = 9;
+  else if (lvl >= 70) bgNum = 8;
+  else if (lvl >= 60) bgNum = 7;
+  else if (lvl >= 50) bgNum = 6;
+  else if (lvl >= 40) bgNum = 5;
+  else if (lvl >= 30) bgNum = 4;
+  else if (lvl >= 20) bgNum = 3;
+  else if (lvl >= 10) bgNum = 2;
+  else bgNum = 1;
+
+  var gameEl = byId('game');
+  var charEl = byId('character');
+  if (gameEl) {
+    gameEl.style.backgroundImage = "url('bg_" + bgNum + ".jpg')";
+  }
+  
+  if (charEl) {
+    if (state.equippedSkin === 'default') {
+      // Смена облика обычного бомжа
+      var charNum = 1;
+      if (lvl >= 100) charNum = 15;
+      else if (lvl >= 85) charNum = 14;
+      else if (lvl >= 75) charNum = 13;
+      else if (lvl >= 70) charNum = 12;
+      else if (lvl >= 65) charNum = 11;
+      else if (lvl >= 55) charNum = 10;
+      else if (lvl >= 50) charNum = 9;
+      else if (lvl >= 40) charNum = 8;
+      else if (lvl >= 30) charNum = 7;
+      else if (lvl >= 25) charNum = 6;
+      else if (lvl >= 20) charNum = 5;
+      else if (lvl >= 15) charNum = 4;
+      else if (lvl >= 10) charNum = 3;
+      else if (lvl >= 5) charNum = 2;
+      else charNum = 1;
+      
+      charEl.src = "bomzh_" + charNum + ".png";
+    } else {
+      // Облик UFC бойца
+      for (var i = 0; i < skins.length; i++) {
+        if (skins[i].id === state.equippedSkin) {
+          charEl.src = skins[i].img;
+          break;
+        }
+      }
+    }
+  }
+}
+
+function render() {
+  updateVisuals();
+  byId('balance').textContent = fmt(state.balance) + ' ₽';
+  byId('tapValue').textContent = '+' + fmt(power(state.clickLevel)) + ' ₽';
+  byId('hourValue').textContent = fmt(businessPerSecond()) + ' ₽/сек';
+  
+  var lvlWidget = byId('level');
+  var claimBtn = byId('claim');
+  
+  if (state.pending) {
+    if (lvlWidget) lvlWidget.style.display = 'none';
+    if (claimBtn) {
+      claimBtn.style.display = 'block';
+      claimBtn.textContent = 'ЗАБРАТЬ УР.' + state.pendingLevel;
+    }
+  } else {
+    if (lvlWidget) lvlWidget.style.display = 'flex';
+    if (claimBtn) claimBtn.style.display = 'none';
+    
+    var currentClicks = state.levelClicks || 0;
+    var neededClicks = state.levelClicksNeeded || 200;
+    var p = Math.max(0, Math.min(100, Math.floor((currentClicks / neededClicks) * 100)));
+    if (isNaN(p)) p = 0;
+    
+    var lvlEl = byId('lvl');
+    var nextEl = byId('next');
+    var pctEl = byId('pct');
+    var fillEl = byId('fill');
+    
+    if (lvlEl) lvlEl.textContent = state.level;
+    if (nextEl) nextEl.textContent = state.level + 1;
+    if (pctEl) pctEl.textContent = p + '%';
+    if (fillEl) fillEl.style.width = p + '%';
+  }
+  
+  var busArr = [];
+  for (var i = 0; i < businesses.length; i++) {
+    var b = businesses[i];
+    busArr.push({
+      name: b.name,
+      cost: b.cost,
+      desc: '+' + fmt(b.rps) + ' ₽/сек',
+      icon: b.icon,
+      owned: b.owned || 0,
+      type: 'business'
+    });
+  }
+  renderList('businessList', busArr);
+  
+  var compArr = [];
+  for (var i = 0; i < companies.length; i++) {
+    var c = companies[i];
+    compArr.push({
+      name: c.name,
+      cost: c.cost,
+      desc: '+' + fmt(c.rph) + ' ₽/час',
+      logo: c.logo,
+      icon: c.icon,
+      owned: c.bought,
+      type: 'company'
+    });
+  }
+  renderList('companyList', compArr);
+  
+  renderTap();
+  renderSkins();
+  renderHeaders();
+  updateSafeText();
+}
+
+function renderList(id, arr) {
+  var box = byId(id);
+  if (!box) return;
+  var html = '';
+  for (var i = 0; i < arr.length; i++) {
+    var x = arr[i];
+    var own = x.owned;
+    var ok = state.balance >= x.cost;
+    var logo = x.logo ? '<img src="' + x.logo + '" onerror="this.style.display=\'none\'">' : x.icon;
+    var button = '';
+    
+    if (x.type === 'business') {
+      button = '<button class="buy" onclick="buyBusiness(' + i + ')">' + fmt(x.cost) + ' ₽</button>';
+    } else {
+      button = own ? '<b class="owned">КУПЛЕНО</b>' : '<button class="buy" onclick="buyCompany(' + i + ')">' + fmt(x.cost) + ' ₽</button>';
+    }
+    
+    var cardClass = 'card';
+    if (!ok) {
+      cardClass += ' disabled';
+    }
+    
+    html += '<div class="' + cardClass + '">' +
+              '<div class="info">' +
+                '<div class="logo">' + logo + '</div>' +
+                '<div class="text">' +
+                  '<span class="name">' + x.name + '</span>' +
+                  '<span class="desc">' + x.desc + (x.type === 'business' ? ' · ' + own + ' шт.' : '') + '</span>' +
+                '</div>' +
+              '</div>' +
+              button +
+            '</div>';
+  }
+  box.innerHTML = html;
+}
+
+function renderTap() {
+  var box = byId('tapList');
+  if (!box) return;
+  var c = cost(state.clickLevel);
+  var ok = state.balance >= c;
+  var cardClass1 = 'card';
+  if (!ok) cardClass1 += ' disabled';
+  
+  var html = '<div class="' + cardClass1 + '">' +
+                '<div class="info">' +
+                  '<div class="logo">👆</div>' +
+                  '<div class="text">' +
+                    '<span class="name">Сила тапа · ур. ' + state.clickLevel + '</span>' +
+                    '<span class="desc">Следующая цена: ' + fmt(c) + ' ₽</span>' +
+                  '</div>' +
+                '</div>' +
+                '<button class="buy" onclick="buyTap()">' + fmt(c) + ' ₽</button>' +
+              '</div>';
+              
+  if (state.safeLevel < 50) {
+    var sc = safeUpgradeCost();
+    var can = state.balance >= sc;
+    var cardClass2 = 'card';
+    if (!can) cardClass2 += ' disabled';
+    html += '<div class="' + cardClass2 + '">' +
+              '<div class="info">' +
+                '<div class="logo">🔐</div>' +
+                '<div class="text">' +
+                  '<span class="name">Вместимость сейфа · ' + state.safeLevel + '/50</span>' +
+                  '<span class="desc">Вместимость: ' + fmt(safeCapacity()) + ' ₽</span>' +
+                '</div>' +
+              '</div>' +
+              '<button class="buy" onclick="buySafeUpgrade()">' + fmt(sc) + ' ₽</button>' +
+            '</div>';
+  } else {
+    html += '<div class="card">' +
+              '<div class="info">' +
+                '<div class="logo">🔐</div>' +
+                '<div class="text">' +
+                  '<span class="name owned">Вместимость сейфа · MAX</span>' +
+                  '<span class="desc">Максимальная вместимость: ' + fmt(safeCapacity()) + ' ₽</span>' +
+                '</div>' +
+              '</div>' +
+              '<b class="owned">MAX</b>' +
+            '</div>';
+  }
+  box.innerHTML = html;
+}
+
+function renderSkins() {
+  var box = byId('skinsList');
+  if (!box) return;
+  var html = '';
+  
+  for (var i = 0; i < skins.length; i++) {
+    var s = skins[i];
+    var isOwned = state.ownedSkins.indexOf(s.id) !== -1;
+    var isEquipped = state.equippedSkin === s.id;
+    var isLocked = state.level < s.levelReq;
+    
+    var actionBlock = '';
+    
+    if (isEquipped) {
+      actionBlock = '<div class="skin-select-container">' +
+                      '<span style="color:#29dc78; font-size:12px; font-weight:bold;">Выбран</span>' +
+                      '<div class="skin-radio active"><div class="skin-radio-dot"></div></div>' +
+                    '</div>';
+    } else if (isOwned) {
+      actionBlock = '<div class="skin-select-container" style="cursor:pointer;" onclick="equipSkin(\'' + s.id + '\')">' +
+                      '<span style="color:#aebbd0; font-size:12px;">Выбрать</span>' +
+                      '<div class="skin-radio"><div class="skin-radio-dot"></div></div>' +
+                    '</div>';
+    } else {
+      if (isLocked) {
+        actionBlock = '<div style="text-align:right;">' +
+                        '<span style="display:block; color:#ff4e61; font-size:10px; margin-bottom:5px; font-weight:bold;">С 30 УРОВНЯ</span>' +
+                        '<button class="buy disabled" style="font-size:10px; padding:8px 10px;">' + fmt(s.cost) + ' ₽</button>' +
+                      '</div>';
+      } else {
+        var canBuy = state.balance >= s.cost;
+        var btnClass = canBuy ? 'buy' : 'buy disabled';
+        actionBlock = '<button class="' + btnClass + '" onclick="buySkin(' + i + ')">' + fmt(s.cost) + ' ₽</button>';
+      }
+    }
+    
+    var cardClass = 'card';
+    if (isLocked || (!isOwned && state.balance < s.cost)) {
+      cardClass += ' disabled';
+    }
+    
+    var imgPath = s.img;
+    if (s.id === 'default') {
+      var demoLvl = state.level;
+      var demoNum = 1;
+      if (demoLvl >= 100) demoNum = 15;
+      else if (demoLvl >= 85) demoNum = 14;
+      else if (demoLvl >= 75) demoNum = 13;
+      else if (demoLvl >= 70) demoNum = 12;
+      else if (demoLvl >= 65) demoNum = 11;
+      else if (demoLvl >= 55) demoNum = 10;
+      else if (demoLvl >= 50) demoNum = 9;
+      else if (demoLvl >= 40) demoNum = 8;
+      else if (demoLvl >= 30) demoNum = 7;
+      else if (demoLvl >= 25) demoNum = 6;
+      else if (demoLvl >= 20) demoNum = 5;
+      else if (demoLvl >= 15) demoNum = 4;
+      else if (demoLvl >= 10) demoNum = 3;
+      else if (demoLvl >= 5) demoNum = 2;
+      else demoNum = 1;
+      imgPath = "bomzh_" + demoNum + ".png";
+    }
+    
+    html += '<div class="' + cardClass + '">' +
+              '<div class="info">' +
+                '<div class="skin-logo">' +
+                  '<img src="' + imgPath + '" onerror="this.style.display=\'none\'">' +
+                '</div>' +
+                '<div class="text">' +
+                  '<span class="name">' + s.name + '</span>' +
+                  '<span class="desc">' + (s.id === 'default' ? 'Улучшается с уровнем' : 'Уникальный боец UFC') + '</span>' +
+                '</div>' +
+              '</div>' +
+              actionBlock +
+            '</div>';
+  }
+  box.innerHTML = html;
+}
+
+function renderHeaders() {
+  var currentClicks = state.levelClicks || 0;
+  var neededClicks = state.levelClicksNeeded || 200;
+  var pctVal = Math.floor((currentClicks / neededClicks) * 100);
+  if (isNaN(pctVal)) pctVal = 0;
+  
+  var p = state.pending ? 'Забрать' : state.level + ' (' + pctVal + '%)';
+  var m = fmt(state.balance) + ' ₽';
+  
+  var panels = ['tap', 'business', 'company', 'status', 'skins', 'settings'];
+  for (var i = 0; i < panels.length; i++) {
+    var x = panels[i];
+    var a = byId(x + 'HeadLvl');
+    var b = byId(x + 'HeadMoney');
+    if (a) a.textContent = p;
+    if (b) b.textContent = m;
+  }
+}
+
+function updateSafeText() {
+  var cap = safeCapacity();
+  var cur = state.safe;
+  var pct = Math.max(0, Math.min(100, Math.floor((cur / cap) * 100)));
+  if (isNaN(pct)) pct = 0;
+
+  if (byId('safeAmount')) byId('safeAmount').textContent = fmt(cur) + ' ₽';
+  if (byId('safeHourly')) byId('safeHourly').textContent = fmt(hourly()) + ' ₽/ч';
+  if (byId('safeMaxAmount')) byId('safeMaxAmount').textContent = fmt(cap) + ' ₽';
+  
+  var collectBtn = byId('collectSafeBtn');
+  if (collectBtn) {
+    if (cur <= 0) {
+      collectBtn.classList.add('disabled');
+    } else {
+      collectBtn.classList.remove('disabled');
+    }
+  }
+
+  var fill = byId('safeBarFill');
+  var txt = byId('safePercentText');
+  
+  if (fill) {
+    fill.style.width = pct + '%';
+    if (pct >= 100) {
+      fill.style.background = '#ff4e61';
+    } else {
+      fill.style.background = 'linear-gradient(90deg,#ffd174,#29dc78)';
+    }
+  }
+  
+  if (txt) {
+    if (pct >= 100) {
+      txt.textContent = 'ЗАПОЛНЕНО!';
+      txt.style.color = '#ff4e61';
+    } else {
+      txt.textContent = pct + '%';
+      txt.style.color = '#ffffff';
+    }
+  }
+
+  if (byId('safeTimer')) {
+    var nextIn = 120 - (state.safeTimer || 0);
+    if (hourly() > 0) {
+      byId('safeTimer').innerHTML = 'Компании пополняют сейф каждые 2 мин.<br>До начисления осталось: <b style="color:#ffd174;">' + nextIn + ' сек</b>';
+    } else {
+      byId('safeTimer').innerHTML = '';
+    }
+  }
+}
+
+function buyTap() {
+  var c = cost(state.clickLevel);
+  if (state.balance < c) return;
+  state.balance -= c;
+  state.clickLevel++;
+  sound(800, 0.12, 'triangle');
+  render();
+  save();
+}
+
+function buySafeUpgrade() {
+  if (state.safeLevel >= 50) return;
+  var c = safeUpgradeCost();
+  if (state.balance < c) return;
+  state.balance -= c;
+  state.safeLevel++;
+  sound(900, 0.12, 'triangle');
+  render();
+  save();
+}
+
+function buyBusiness(i) {
+  var b = businesses[i];
+  if (state.balance < b.cost) return;
+  state.balance -= b.cost;
+  b.owned = (b.owned || 0) + 1;
+  b.cost = Math.round(b.cost * 1.15);
+  render();
+  save();
+}
+
+function buyCompany(i) {
+  var c = companies[i];
+  if (c.bought || state.balance < c.cost) return;
+  state.balance -= c.cost;
+  c.bought = true;
+  render();
+  save();
+}
+
+function buySkin(index) {
+  var s = skins[index];
+  if (state.level < s.levelReq) return;
+  if (state.ownedSkins.indexOf(s.id) !== -1) return;
+  if (state.balance < s.cost) return;
+  
+  state.balance -= s.cost;
+  state.ownedSkins.push(s.id);
+  state.equippedSkin = s.id;
+  sound(1000, 0.15, 'triangle');
+  render();
+  save();
+}
+
+function equipSkin(id) {
+  if (state.ownedSkins.indexOf(id) === -1) return;
+  state.equippedSkin = id;
+  sound(700, 0.08, 'sine');
+  render();
+  save();
+}
+
+function openPanel(id) {
+  closePanels();
+  var p = byId(id);
+  if (p) p.classList.add('open');
+  sound(700, 0.05, 'sine');
+  setTimeout(updateClickBounds, 400); // Обновление геометрии экрана при анимации панели
+}
+
+function closePanels() {
+  var list = document.querySelectorAll('.panel');
+  for (var i = 0; i < list.length; i++) {
+    list[i].classList.remove('open');
+  }
+  setTimeout(updateClickBounds, 400);
+}
+
+function openSafe() {
+  updateSafeText();
+  var modal = byId('safeModal');
+  if (modal) modal.classList.add('show');
+  sound(700, 0.06, 'sine');
+}
+
+function collectSafe() {
+  if (state.safe > 0) {
+    state.balance += state.safe;
+    state.safe = 0;
+    render();
+    save();
+    sound(1000, 0.12, 'triangle');
+  }
+  updateSafeText();
+}
+
+function closeModal(id) {
+  var modal = byId(id);
+  if (modal) modal.classList.remove('show');
+}
+
+function openReward() {
+  var r = currentLevelReward();
+  var txt = byId('rewardText');
+  if (txt) {
+    txt.innerHTML = 'Новый уровень: <b>' + state.pendingLevel + '</b><br>Бонус (15%): <strong style="color:#29dc78;font-size:24px">+' + fmt(r) + ' ₽</strong>';
+  }
+  var modal = byId('rewardModal');
+  if (modal) modal.classList.add('show');
+  sound(900, 0.1, 'sine');
+}
+
+function claimReward() {
+  state.balance += currentLevelReward();
+  state.level = state.pendingLevel;
+  state.levelClicks = 0;
+  state.levelClicksNeeded = Math.floor(Math.random() * 101) + 170;
+  state.pending = false;
+  var modal = byId('rewardModal');
+  if (modal) modal.classList.remove('show');
+  render();
+  save();
+  sound(1046, 0.2, 'triangle');
+}
+
+// Высокоскоростной аппаратный обработчик нажатий pointerdown
+byId('clickArea').addEventListener('pointerdown', function(e) {
+  e.preventDefault();
+  clickGame(e);
+}, { passive: false });
+
+byId('sfx').addEventListener('input', function(e) {
+  state.sfx = e.target.value / 100;
+  byId('sfxText').textContent = e.target.value + '%';
+  if (sfxGain) sfxGain.gain.value = state.sfx;
+  sound(600, 0.08, 'sine');
+});
+
+byId('music').addEventListener('input', function(e) {
+  state.music = e.target.value / 100;
+  byId('musicText').textContent = e.target.value + '%';
+  if (musicGain) musicGain.gain.value = state.music * 0.8;
+});
+
+setInterval(tick, 1000);
+setInterval(save, 5000);
+window.addEventListener('beforeunload', save);
+
+window.addEventListener('resize', updateClickBounds);
+
+window.addEventListener('load', function() {
+  load();
+  updateClickBounds(); // Первичный замер координат без лагов
+  byId('sfx').value = state.sfx * 100;
+  byId('music').value = state.music * 100;
+  byId('sfxText').textContent = Math.round(state.sfx * 100) + '%';
+  byId('musicText').textContent = Math.round(state.music * 100) + '%';
+  render();
+  setTimeout(function() {
+    var intro = byId('intro');
+    if (intro) {
+      intro.style.opacity = '0';
+      setTimeout(function() {
+        intro.remove();
+        updateClickBounds();
+      }, 800);
+    }
+  }, 1500);
+});
+</script>
+</body>
+</html>
