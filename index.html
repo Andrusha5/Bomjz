@@ -44,12 +44,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#08090d;color:#fff;t
 .money{position:absolute;color:#22dc77;font-size:26px;font-weight:900;pointer-events:none;z-index:10;text-shadow:2px 2px 4px #000;animation:moneyUp .8s forwards;will-change:transform,opacity}@keyframes moneyUp{to{transform:translateY(-120px) scale(1.2);opacity:0}}
 #safeButton{position:absolute;left:16px;top:165px;z-index:12;width:62px;height:62px;border-radius:50%;border:3px solid #fff;background:#111827;box-shadow:0 0 20px #ff983b99;cursor:pointer;padding:0;overflow:hidden}
 #safeButton:active{transform:scale(.92)}
-#bottom{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:9px;background:#0d1320f2;border-top:2px solid #ff9f4333;z-index:20}
-.nav{min-width:0;aspect-ratio:1;border-radius:14px;border:1px solid #35415a;background:linear-gradient(145deg,#202a40,#111827);color:#aebbd0;font-size:9px;font-weight:bold}.nav span{display:block;font-size:21px;margin-bottom:3px}.nav:active{transform:scale(.93);border-color:#ffab50}
+#bottom{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:9px;background:#0d1320f2;border-top:2px solid #ff9f4333;z-index:20}
+.nav{min-width:0;aspect-ratio:1;border-radius:14px;border:1px solid #35415a;background:linear-gradient(145deg,#202a40,#111827);color:#aebbd0;font-size:8px;font-weight:bold}.nav span{display:block;font-size:18px;margin-bottom:3px}.nav:active{transform:scale(.93);border-color:#ffab50}
 .panel{position:absolute;inset:0;z-index:50;background:#090c13f8;transform:translateY(100%);transition:transform .3s cubic-bezier(0.16, 1, 0.3, 1);display:flex;flex-direction:column;will-change:transform}.panel.open{transform:translateY(0)}
 .panelHead{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#111827;border-bottom:2px solid #ff9f4344}.back{border:0;border-radius:11px;padding:9px 14px;background:#ff4e61;color:#fff;font-weight:bold}.headInfo{text-align:right}.headLvl{display:block;color:#ffab50;font-size:12px;font-weight:bold}.headMoney{font-size:18px;font-weight:bold}
 .panelBody{overflow-y:auto;flex:1;padding:15px} .title{text-align:center;color:#ffd174;font-size:17px;font-weight:bold;margin-bottom:15px;text-transform:uppercase}.list{display:flex;flex-direction:column;gap:11px}
-.card{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:13px;border-radius:16px;border:1px solid #ffae5030;background:#ffffff08;transition:opacity 0.2s}.card.disabled{border-color:#ffffff12;opacity:0.65}.info{display:flex;align-items:center;gap:9px;min-width:0;flex:1}.logo{width:43px;height:43px;min-width:43px;border-radius:11px;object-fit:cover;background:#29344a;display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden}.logo img{width:100%;height:100%;object-fit:cover}.text{min-width:0}.name{display:block;font-size:14px;font-weight:bold;white-space:normal}.desc{display:block;margin-top:4px;font-size:11px;color:#a8b5c8}.buy{border:0;border-radius:12px;padding:10px 12px;background:linear-gradient(135deg,#ff9f43,#ff6681);color:#fff;font-size:11px;font-weight:bold;white-space:nowrap}.disabled .buy{background:#273043;color:#a0acc0}.owned{color:#29dc78;font-weight:bold}
+.card{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:13px;border-radius:16px;border:1px solid #ffae5030;background:#ffffff08;transition:opacity 0.2s;cursor:pointer}.card.disabled{border-color:#ffffff12;opacity:0.65}.info{display:flex;align-items:center;gap:9px;min-width:0;flex:1}.logo{width:43px;height:43px;min-width:43px;border-radius:11px;object-fit:cover;background:#29344a;display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden}.logo img{width:100%;height:100%;object-fit:cover}.text{min-width:0}.name{display:block;font-size:14px;font-weight:bold;white-space:normal}.desc{display:block;margin-top:4px;font-size:11px;color:#a8b5c8}.buy{border:0;border-radius:12px;padding:10px 12px;background:linear-gradient(135deg,#ff9f43,#ff6681);color:#fff;font-size:11px;font-weight:bold;white-space:nowrap}.disabled .buy{background:#273043;color:#a0acc0}.owned{color:#29dc78;font-weight:bold}
 .statsRow{display:flex;justify-content:space-between;padding:13px 3px;border-bottom:1px solid #ffffff12;font-size:14px}.statsRow span:first-child{color:#9aaac0}
 .setting{padding:15px;border:1px solid #ffffff14;border-radius:15px;background:#ffffff08;margin-bottom:15px}.setting label{display:flex;justify-content:space-between;margin-bottom:12px}.slider{width:100%;accent-color:#ff9f43}
 .modal{position:absolute;inset:0;z-index:100;background:#000d;display:none;align-items:center;justify-content:center}.modal.show{display:flex}
@@ -74,6 +74,25 @@ html,body{width:100%;height:100%;overflow:hidden;background:#08090d;color:#fff;t
 .skin-radio.active{border-color:#29dc78}
 .skin-radio-dot{width:10px;height:10px;border-radius:50%;background-color:#29dc78;transform:scale(0);transition:transform .2s}
 .skin-radio.active .skin-radio-dot{transform:scale(1)}
+
+/* Специфичные стили для Акций */
+.stock-tabs{display:flex;gap:10px;margin-bottom:15px}
+.stock-tab-btn{flex:1;border:0;border-radius:14px;padding:12px;background:#17202cf2;color:#aebbd0;font-weight:bold;font-size:13px;cursor:pointer;transition:background 0.2s,color 0.2s}
+.stock-tab-btn.active{background:linear-gradient(135deg,#ff9f43,#ff6681);color:#fff;box-shadow:0 0 10px rgba(255,159,67,0.2)}
+.stock-graph-card{background:#111827;border:1px solid #ffae5030;border-radius:20px;padding:15px;margin-bottom:15px;position:relative}
+.stock-canvas{width:100%;height:160px;background:#0d1320;border-radius:12px;display:block}
+.stock-ctrl-row{display:flex;align-items:center;justify-content:space-between;margin-top:15px;gap:10px}
+.stock-qty-input-box{display:flex;align-items:center;background:#17202c;border-radius:12px;border:1px solid #ffffff15;overflow:hidden}
+.stock-qty-btn{border:0;background:transparent;color:#fff;font-size:18px;font-weight:bold;width:36px;height:36px;cursor:pointer}
+.stock-qty-btn:active{background:#ffffff0a}
+.stock-qty-val{width:44px;text-align:center;background:transparent;border:0;color:#fff;font-size:14px;font-weight:bold}
+.stock-deal-btn{border:0;border-radius:12px;padding:11px 20px;color:#fff;font-weight:bold;font-size:13px;cursor:pointer;flex:1}
+.stock-deal-btn.buy-btn{background:linear-gradient(135deg,#29dc78,#059669)}
+.stock-deal-btn.sell-btn{background:linear-gradient(135deg,#ff4e61,#b91c1c)}
+.stock-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.stock-info-tile{background:#ffffff04;border-radius:12px;padding:10px;text-align:center;border:1px solid #ffffff08}
+.stock-info-tile span{display:block;font-size:10px;color:#aebbd0;margin-bottom:4px}
+.stock-info-tile b{font-size:13px}
 </style>
 </head>
 <body>
@@ -115,6 +134,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#08090d;color:#fff;t
   <button class="nav" onclick="openPanel('businessPanel')"><span>💼</span>БИЗНЕС</button>
   <button class="nav" onclick="openPanel('companyPanel')"><span>🏢</span>КОМПАНИЯ</button>
   <button class="nav" onclick="openPanel('statusPanel')"><span>📈</span>АКЦИИ</button>
+  <button class="nav" onclick="openPanel('cryptoPanel')"><span>⛏️</span>КРИПТО</button>
   <button class="nav" onclick="openPanel('skinsPanel')"><span>🎭</span>СКИНЫ</button>
 </nav>
 
@@ -160,6 +180,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#08090d;color:#fff;t
   </div>
 </section>
 
+<!-- Вкладка Акции -->
 <section id="statusPanel" class="panel">
   <div class="panelHead">
     <button class="back" onclick="closePanels()">◀ Назад</button>
@@ -168,13 +189,129 @@ html,body{width:100%;height:100%;overflow:hidden;background:#08090d;color:#fff;t
       <span class="headMoney" id="statusHeadMoney"></span>
     </div>
   </div>
-  <div class="panelBody">
-    <div class="title">Акции</div>
-    <div style="text-align: center; padding: 40px 20px; color: #aebbd0;">
-      <span style="font-size: 54px; display: block; margin-bottom: 20px;">📈</span>
-      <p style="font-size: 18px; font-weight: bold; color: #ffd174; margin-bottom: 10px;">Раздел в разработке</p>
-      <p style="font-size: 13px; line-height: 1.5; max-width: 280px; margin: 0 auto;">Скоро здесь появится полноценная биржа акций! Вы сможете инвестировать свои рубли в ценные бумаги и получать огромную прибыль.</p>
+  <div class="panelBody" style="display:flex; flex-direction:column; padding:15px 15px 0 15px;">
+    <div class="title" style="margin-bottom:10px;">Биржа Акций</div>
+    
+    <div class="stock-tabs">
+      <button id="tabStocksAll" class="stock-tab-btn active" onclick="switchStockTab('all')">Все акции</button>
+      <button id="tabStocksMy" class="stock-tab-btn" onclick="switchStockTab('my')">Мои</button>
     </div>
+
+    <!-- Список всех акций (сортировка по начальной цене) -->
+    <div id="stocksListAll" class="list" style="display:block;"></div>
+    
+    <!-- Мой портфель акций -->
+    <div id="stocksListMy" class="list" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- Вкладка Информации по конкретной Акции -->
+<section id="stockDetailPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="openPanel('statusPanel')">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="stockDetailHeadLvl"></span>
+      <span class="headMoney" id="stockDetailHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title" id="sdTitle">APPLE INC. (AAPL)</div>
+    
+    <div class="stock-graph-card">
+      <canvas id="stockCanvas" class="stock-canvas"></canvas>
+    </div>
+
+    <div class="stock-info-tile" style="margin-bottom:15px; border:1px solid #ff9f4388;">
+      <span>ТЕКУЩАЯ ЦЕНА ЗА 1 АКЦИЮ</span>
+      <b id="sdPrice" style="font-size:24px; color:#ffd174;">1.10 трлн ₽</b>
+    </div>
+
+    <div class="stock-info-grid">
+      <div class="stock-info-tile">
+        <span>У ВАС В НАЛИЧИИ</span>
+        <b id="sdOwned">0 / 100 шт.</b>
+      </div>
+      <div class="stock-info-tile">
+        <span>СРЕДНЯЯ ЦЕНА ПОКУПКИ</span>
+        <b id="sdAvg">0 ₽</b>
+      </div>
+    </div>
+
+    <div class="stock-info-grid" style="margin-top:10px;">
+      <div class="stock-info-tile" style="border-color: #29dc78a5;">
+        <span>МАКСИМАЛЬНАЯ ЦЕНА (МАКС)</span>
+        <b id="sdMaxPrice" style="color:#29dc78;">0 ₽</b>
+      </div>
+      <div class="stock-info-tile" style="border-color: #ff4e61a5;">
+        <span>МИНИМАЛЬНАЯ ЦЕНА (МИН)</span>
+        <b id="sdMinPrice" style="color:#ff4e61;">0 ₽</b>
+      </div>
+    </div>
+
+    <div class="stock-info-grid" style="margin-top:10px;">
+      <div class="stock-info-tile" style="grid-column: span 2;">
+        <span>ТЕКУЩАЯ ДОХОДНОСТЬ ПОРТФЕЛЯ</span>
+        <b id="sdProfit" style="color:#fff;">0% (0 ₽)</b>
+      </div>
+    </div>
+
+    <div class="title" style="margin-top:20px; font-size:11px; margin-bottom:5px;">ВЫБЕРИТЕ ОБЪЕМ СДЕЛКИ</div>
+    <div class="stock-tabs" style="gap:5px; margin-bottom:10px;">
+      <button class="stock-tab-btn" style="padding:8px; font-size:12px; border-radius:10px;" onclick="setDealQty(1)">1 шт.</button>
+      <button class="stock-tab-btn" style="padding:8px; font-size:12px; border-radius:10px;" onclick="setDealQty(10)">10 шт.</button>
+      <button class="stock-tab-btn" style="padding:8px; font-size:12px; border-radius:10px;" onclick="setDealQty(100)">100 шт.</button>
+      <button class="stock-tab-btn" style="padding:8px; font-size:12px; border-radius:10px;" onclick="setDealMax()">МАКС</button>
+    </div>
+
+    <div class="stock-info-tile" style="background:#ffffff03; padding:12px;">
+      <span>Итоговая сумма сделки:</span>
+      <b id="sdTotalDealCost" style="font-size:18px; color:#ffd174;">0 ₽</b>
+    </div>
+
+    <div class="stock-ctrl-row">
+      <div class="stock-qty-input-box">
+        <button class="stock-qty-btn" onclick="adjustStockQty(-1)">−</button>
+        <input type="number" id="stockQtyInput" class="stock-qty-val" value="1" readonly>
+        <button class="stock-qty-btn" onclick="adjustStockQty(1)">+</button>
+      </div>
+      <button class="stock-deal-btn buy-btn" onclick="buyStockAction()">КУПИТЬ</button>
+      <button class="stock-deal-btn sell-btn" onclick="sellStockAction()">ПРОДАТЬ</button>
+    </div>
+  </div>
+</section>
+
+<!-- Новая вкладка: КРИПТО-ФЕРМА -->
+<section id="cryptoPanel" class="panel">
+  <div class="panelHead">
+    <button class="back" onclick="closePanels()">◀ Назад</button>
+    <div class="headInfo">
+      <span class="headLvl" id="cryptoHeadLvl"></span>
+      <span class="headMoney" id="cryptoHeadMoney"></span>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="title" style="margin-bottom:10px;">⛏️ КРИПТО-ФЕРМА</div>
+    
+    <div class="stock-info-tile" style="margin-bottom:15px; border:1px solid #29dc7888; background:#111827;">
+      <span>КУРС БОМЖКОИНА (BMC)</span>
+      <b id="cryptoBmcPrice" style="font-size:24px; color:#29dc78;">0 ₽</b>
+    </div>
+
+    <div class="stock-info-grid" style="margin-bottom:15px;">
+      <div class="stock-info-tile">
+        <span>ВАШ БАЛАНС BMC</span>
+        <b id="cryptoBmcBalance" style="color:#ffd174;">0.000 BMC</b>
+      </div>
+      <div class="stock-info-tile">
+        <span>ДОБЫЧА В СЕКУНДУ</span>
+        <b id="cryptoMiningRate">0.000 BMC/с</b>
+      </div>
+    </div>
+
+    <button id="cryptoSellBtn" class="buy" style="width:100%; height:48px; font-size:14px; margin-bottom:20px; background:linear-gradient(135deg,#29dc78,#059669); border-radius:14px; box-shadow: 0 0 15px rgba(41,220,120,0.25);" onclick="sellAllBmc()">ПРОДАТЬ ВСЕ В РУБЛИ</button>
+
+    <div class="title" style="font-size:13px; text-align:left; margin-bottom:10px; text-transform:uppercase; color:#ffd174;">ПОКУПКА ОБОРУДОВАНИЯ</div>
+    <div id="cryptoMinersList" class="list"></div>
   </div>
 </section>
 
@@ -259,7 +396,6 @@ var KEY = 'bestgame_complete_v16';
 var POWERS = [1, 2, 3, 5, 8, 11, 16, 22, 33, 67, 123, 199, 297, 999, 1757, 6767, 15903];
 var COSTS = [175, 333, 1200, 1700];
 
-// Баланс: Доходы всех бизнесов увеличены в 5 раз!
 var businesses = [
  {id:'bottle', name:'Сбор бутылок', cost:160, rps:25, icon:'🍾', owned:0},
  {id:'cardboard', name:'Сбор картона', cost:800, rps:130, icon:'📦', owned:0},
@@ -273,23 +409,23 @@ var businesses = [
  {id:'apps', name:'Разработчик приложений', cost:5320000000, rps:1100000000, icon:'📱', owned:0}
 ];
 
-// Последние 10 компаний: доход х5, стоимость +50%
+// Пассивный доход в час перебалансирован: теперь при покупке компаний сейф заполняется за ~12 часов!
 var rawCompanies = [
- ['Loda', 6650000, 280600, 'lada.png', '🚗'],
- ['Nuttola', 8911000, 549000, 'nutella.png', '🍫'],
- ['Xsioma', 14630000, 951600, 'xiaomi.png', '📱'],
- ['Mesredec', 29260000, 1464000, 'mercedes.png', '🏎️'],
- ['BWM', 33250000, 1830000, 'bmw.png', '🏍️'],
- ['Coka Colo', 89775000, 20130000, 'coca_cola.png', '🥤'],
- ['Netfelix', 193515000, 31110000, 'netflix.png', '🎬'],
- ['Янедкс', 311220000, 67100000, 'yandex.png', '🔍'],
- ['Гыгуль', 706230000, 92293000, 'google.png', '🧭'],
- ['Aples', 909720000, 146400000, 'apple.png', '🍎'],
- ['Wilderbis', 2105922000, 213500000, 'wildberries.png', '🛍️'],
- ['Nosa', 3910200000, 829600000, 'nasa.png', '🚀'],
- ['Кулойл', 4189500000, 1128500000, 'lukoil.png', '⛽'],
- ['СбарБенк', 4887750000, 1354200000, 'sberbank.png', '🏦'],
- ['Omozon', 6703200000, 2293600000, 'amazon.png', '📦']
+ ['Loda', 6650000, 1500000, 'lada.png', '🚗'],
+ ['Nuttola', 8911000, 3000000, 'nutella.png', '🍫'],
+ ['Xsioma', 14630000, 6000000, 'xiaomi.png', '📱'],
+ ['Mesredec', 29260000, 15000000, 'mercedes.png', '🏎️'],
+ ['BWM', 33250000, 20000000, 'bmw.png', '🏍️'],
+ ['Coka Colo', 89775000, 60000000, 'coca_cola.png', '🥤'],
+ ['Netfelix', 193515000, 150000000, 'netflix.png', '🎬'],
+ ['Янедкс', 311220000, 300000000, 'yandex.png', '🔍'],
+ ['Гыгуль', 706230000, 800000000, 'google.png', '🧭'],
+ ['Aples', 909720000, 2500000000, 'apple.png', '🍎'],
+ ['Wilderbis', 2105922000, 10000000000, 'wildberries.png', '🛍️'],
+ ['Nosa', 3910200000, 30000000000, 'nasa.png', '🚀'],
+ ['Кулойл', 4189500000, 50000000000, 'lukoil.png', '⛽'],
+ ['СбарБенк', 4887750000, 100000000000, 'sberbank.png', '🏦'],
+ ['Omozon', 6703200000, 250000000000, 'amazon.png', '📦']
 ];
 
 var companies = [];
@@ -320,6 +456,15 @@ var skins = [
   {id:'xamzat', name:'Хамзат Чимаев', cost:1200000000000, img:'xamzat.png', levelReq:50, secret:true}
 ];
 
+// Крипто-оборудование для новой функции
+var minersConfig = [
+  { name: 'Б/У Видеокарта', cost: 50000, rps: 0.001, icon: '📼' },
+  { name: 'Игровая Видеокарта', cost: 450000, rps: 0.01, icon: '🎮' },
+  { name: 'Майнинг Риг RX', cost: 3500000, rps: 0.09, icon: '⚡' },
+  { name: 'ASIC Майнер S19', cost: 25000000, rps: 0.8, icon: '⛏️' },
+  { name: 'Квантовое Крипто-Ядро', cost: 180000000, rps: 6.5, icon: '🧬' }
+];
+
 var state = {
   balance: 0,
   safe: 0,
@@ -338,18 +483,33 @@ var state = {
   sfx: 0.6,
   music: 0.4,
   equippedSkin: 'default',
-  ownedSkins: ['default']
+  ownedSkins: ['default'],
+  stocks: {},
+  
+  // Баланс БомжКоинов и фермы
+  bmcBalance: 0,
+  bmcPrice: 50000,
+  bmcMiners: [0, 0, 0, 0, 0],
+  bmcHistory: [50000, 50000]
 };
 
 var audio = null, sfxGain = null, musicGain = null;
 var clickBounds = null;
 var activePanelId = null;
+var currentStocksTab = 'all';
+var dealQty = 1;
+var activeStockId = null;
+
+var visualHistory = []; 
 
 // Кеширование DOM-структур
 var bDomCache = [];
 var cDomCache = [];
 var sDomCache = [];
 var tDomCache = {};
+var sAllDomCache = [];
+var sMyDomCache = [];
+var cryptoDomCache = [];
 
 function byId(id) {
   return document.getElementById(id);
@@ -419,7 +579,8 @@ function buildStoreDOM() {
   if (bList) {
     bList.innerHTML = '';
     bDomCache = [];
-    businesses.forEach(function(b, idx) {
+    for (var idx = 0; idx < businesses.length; idx++) {
+      var b = businesses[idx];
       var card = document.createElement('div');
       card.className = 'card';
       var logo = b.icon;
@@ -430,7 +591,7 @@ function buildStoreDOM() {
         desc: card.querySelector('.desc'),
         btn: card.querySelector('.buy')
       });
-    });
+    }
   }
 
   // Компании
@@ -438,7 +599,8 @@ function buildStoreDOM() {
   if (cList) {
     cList.innerHTML = '';
     cDomCache = [];
-    companies.forEach(function(c, idx) {
+    for (var idx = 0; idx < companies.length; idx++) {
+      var c = companies[idx];
       var card = document.createElement('div');
       card.className = 'card';
       var logo = c.logo ? '<img src="' + c.logo + '" onerror="this.style.display=\'none\'">' : c.icon;
@@ -448,7 +610,7 @@ function buildStoreDOM() {
         card: card,
         btnBox: card.querySelector('.btn-box')
       });
-    });
+    }
   }
 
   // Тапы
@@ -480,7 +642,7 @@ function buildStoreDOM() {
   if (sList) {
     sList.innerHTML = '';
     sDomCache = [];
-    skins.forEach(function(s, idx) {
+    for (var idx = 0; idx < skins.length; idx++) {
       var card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = '<div class="info"><div class="skin-logo"><img></div><div class="text"><span class="name"></span><span class="desc"></span></div></div><div class="btn-box"></div>';
@@ -492,26 +654,138 @@ function buildStoreDOM() {
         desc: card.querySelector('.desc'),
         btnBox: card.querySelector('.btn-box')
       });
-    });
+    }
+  }
+
+  // Все акции (во вкладке Акции)
+  var sAllList = byId('stocksListAll');
+  if (sAllList) {
+    sAllList.innerHTML = '';
+    sAllDomCache = [];
+    for (var i = 0; i < companies.length; i++) {
+      var c = companies[i];
+      var card = document.createElement('div');
+      card.className = 'card';
+      (function(id) {
+        card.onclick = function() { openStockDetail(id); };
+      })(c.id);
+      var logo = c.logo ? '<img src="' + c.logo + '" onerror="this.style.display=\'none\'">' : c.icon;
+      card.innerHTML = 
+        '<div class="info">' +
+          '<div class="logo">' + logo + '</div>' +
+          '<div class="text">' +
+            '<span class="name">' + c.name + '</span>' +
+            '<span class="desc"></span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="text-align:right;">' +
+          '<span class="stock-price-val" style="font-size:13px; font-weight:bold; color:#ffd174; display:block;"></span>' +
+          '<span style="font-size:10px; color:#ff9f43;">График цен 📈</span>' +
+        '</div>';
+      sAllList.appendChild(card);
+      sAllDomCache.push({
+        card: card,
+        desc: card.querySelector('.desc'),
+        priceVal: card.querySelector('.stock-price-val')
+      });
+    }
+  }
+
+  // Мои акции (во вкладке Акции)
+  var sMyList = byId('stocksListMy');
+  if (sMyList) {
+    sMyList.innerHTML = '';
+    sMyDomCache = [];
+    for (var i = 0; i < companies.length; i++) {
+      var c = companies[i];
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.style.display = 'none';
+      (function(id) {
+        card.onclick = function() { openStockDetail(id); };
+      })(c.id);
+      var logo = c.logo ? '<img src="' + c.logo + '" onerror="this.style.display=\'none\'">' : c.icon;
+      card.innerHTML = 
+        '<div class="info">' +
+          '<div class="logo">' + logo + '</div>' +
+          '<div class="text">' +
+            '<span class="name">' + c.name + '</span>' +
+            '<span class="desc"></span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="text-align:right;">' +
+          '<span class="stock-price-val" style="font-size:13px; font-weight:bold; color:#ffd174; display:block;"></span>' +
+          '<span class="stock-profit-val" style="font-size:11px; font-weight:bold;"></span>' +
+        '</div>';
+      sMyList.appendChild(card);
+      sMyDomCache.push({
+        card: card,
+        desc: card.querySelector('.desc'),
+        priceVal: card.querySelector('.stock-price-val'),
+        profitVal: card.querySelector('.stock-profit-val')
+      });
+    }
+
+    var emptyDiv = document.createElement('div');
+    emptyDiv.id = 'stocksListMyEmpty';
+    emptyDiv.style.textAlign = 'center';
+    emptyDiv.style.padding = '40px 10px';
+    emptyDiv.style.color = '#aebbd0';
+    emptyDiv.innerHTML = 
+      '<span style="font-size:42px; display:block; margin-bottom:10px;">💼</span>' +
+      '<p style="font-size:14px; font-weight:bold;">У вас пока нет купленных акций.</p>' +
+      '<p style="font-size:11px; margin-top:5px;">Перейдите во вкладку "Все акции", чтобы совершить свою первую сделку.</p>';
+    sMyList.appendChild(emptyDiv);
+  }
+
+  // Новая вкладка: Крипто-майнеры
+  var crList = byId('cryptoMinersList');
+  if (crList) {
+    crList.innerHTML = '';
+    cryptoDomCache = [];
+    for (var idx = 0; idx < minersConfig.length; idx++) {
+      var m = minersConfig[idx];
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = 
+        '<div class="info">' +
+          '<div class="logo">' + m.icon + '</div>' +
+          '<div class="text">' +
+            '<span class="name">' + m.name + '</span>' +
+            '<span class="desc">+' + m.rps + ' BMC/с</span>' +
+          '</div>' +
+        '</div>' +
+        '<button class="buy"></button>';
+      crList.appendChild(card);
+      cryptoDomCache.push({
+        card: card,
+        desc: card.querySelector('.desc'),
+        btn: card.querySelector('.buy')
+      });
+    }
   }
 }
 
 // Плавное быстрое обновление DOM
 function updateStoreDOM() {
   // Бизнес
-  businesses.forEach(function(b, i) {
+  for (var i = 0; i < businesses.length; i++) {
+    var b = businesses[i];
     var dom = bDomCache[i];
     if (dom) {
       dom.desc.textContent = '+' + fmt(b.rps) + ' ₽/сек · ' + (b.owned || 0) + ' шт.';
       dom.btn.textContent = fmt(b.cost) + ' ₽';
-      dom.btn.onclick = function() { buyBusiness(i); };
+      (function(index) {
+        dom.btn.onclick = function() { buyBusiness(index); };
+      })(i);
       if (state.balance >= b.cost) dom.card.classList.remove('disabled');
       else dom.card.classList.add('disabled');
     }
-  });
+  }
 
   // Компании
-  companies.forEach(function(c, i) {
+  for (var i = 0; i < companies.length; i++) {
+    var c = companies[i];
     var dom = cDomCache[i];
     if (dom) {
       if (c.bought) {
@@ -523,7 +797,7 @@ function updateStoreDOM() {
         else dom.card.classList.add('disabled');
       }
     }
-  });
+  }
 
   // Тапы
   if (tDomCache.tapCard) {
@@ -550,7 +824,8 @@ function updateStoreDOM() {
   }
 
   // Скины
-  skins.forEach(function(s, i) {
+  for (var i = 0; i < skins.length; i++) {
+    var s = skins[i];
     var dom = sDomCache[i];
     if (dom) {
       var isOwned = state.ownedSkins.indexOf(s.id) !== -1 || (s.cost === 0 && state.level >= s.levelReq);
@@ -608,7 +883,7 @@ function updateStoreDOM() {
         }
       }
     }
-  });
+  }
 }
 
 // Высокопроизводительный цикл обновления экрана
@@ -620,6 +895,8 @@ function frameLoop() {
     byId('balance').textContent = fmt(state.balance) + ' ₽';
     lastVisualBalance = state.balance;
     updateStoreDOM();
+    updateStockUI();
+    updateCryptoDOM();
   }
   
   if (state.levelClicks !== lastVisualClicks || state.pending) {
@@ -654,9 +931,421 @@ function frameLoop() {
     lastVisualClicks = state.levelClicks;
     renderHeaders();
   }
+
+  // Отрисовка плавно движущегося графика
+  if (activePanelId === 'stockDetailPanel' && activeStockId) {
+    var realHistory = state.stocks[activeStockId].history;
+    if (visualHistory.length !== realHistory.length) {
+      visualHistory = [];
+      for (var i = 0; i < realHistory.length; i++) {
+        visualHistory.push(realHistory[i]);
+      }
+    } else {
+      for (var i = 0; i < realHistory.length; i++) {
+        visualHistory[i] = visualHistory[i] + (realHistory[i] - visualHistory[i]) * 0.12;
+      }
+    }
+    drawStockChart();
+  }
+
   requestAnimationFrame(frameLoop);
 }
 
+// ----------------------------------------------------
+// МОДУЛЬ БИРЖИ АКЦИЙ (Все 15 компаний) ES5-совместимый
+// ----------------------------------------------------
+function switchStockTab(tabName) {
+  currentStocksTab = tabName;
+  byId('tabStocksAll').className = tabName === 'all' ? 'stock-tab-btn active' : 'stock-tab-btn';
+  byId('tabStocksMy').className = tabName === 'my' ? 'stock-tab-btn active' : 'stock-tab-btn';
+  
+  byId('stocksListAll').style.display = tabName === 'all' ? 'block' : 'none';
+  byId('stocksListMy').style.display = tabName === 'my' ? 'block' : 'none';
+  
+  renderStockTabLists();
+  sound(700, 0.05, 'sine');
+}
+
+function renderStockTabLists() {
+  var anyOwned = false;
+
+  for (var i = 0; i < companies.length; i++) {
+    var c = companies[i];
+    var s = state.stocks[c.id];
+    if (!s) continue;
+
+    // 1) Обновляем вкладку "Все акции"
+    var domAll = sAllDomCache[i];
+    if (domAll) {
+      domAll.desc.textContent = 'У вас в наличии: ' + s.owned + ' / 100 шт.';
+      domAll.priceVal.textContent = fmt(s.price) + ' ₽';
+    }
+
+    // 2) Обновляем вкладку "Мои"
+    var domMy = sMyDomCache[i];
+    if (domMy) {
+      if (s.owned > 0) {
+        anyOwned = true;
+        domMy.card.style.display = 'flex';
+        domMy.desc.textContent = 'Количество: ' + s.owned + ' шт. · Ср. покупка: ' + fmt(s.avgBuyPrice) + ' ₽';
+        domMy.priceVal.textContent = fmt(s.price) + ' ₽';
+        
+        var profitPct = 0;
+        if (s.avgBuyPrice > 0) {
+          profitPct = ((s.price - s.avgBuyPrice) / s.avgBuyPrice) * 100;
+        }
+        var color = profitPct >= 0 ? '#29dc78' : '#ff4e61';
+        var prefix = profitPct >= 0 ? '+' : '';
+        domMy.profitVal.textContent = prefix + profitPct.toFixed(1) + '%';
+        domMy.profitVal.style.color = color;
+      } else {
+        domMy.card.style.display = 'none';
+      }
+    }
+  }
+
+  var emptyPlaceholder = byId('stocksListMyEmpty');
+  if (emptyPlaceholder) {
+    emptyPlaceholder.style.display = anyOwned ? 'none' : 'block';
+  }
+}
+
+function openStockDetail(stockId) {
+  activeStockId = stockId;
+  openPanel('stockDetailPanel');
+  dealQty = 1;
+  byId('stockQtyInput').value = dealQty;
+  visualHistory = [];
+  updateStockDetailUI();
+}
+
+function adjustStockQty(amt) {
+  dealQty = Math.max(1, Math.min(100, dealQty + amt));
+  byId('stockQtyInput').value = dealQty;
+  updateStockDetailUI();
+}
+
+// Быстрый выбор количества
+function setDealQty(qty) {
+  dealQty = Math.max(1, Math.min(100, qty));
+  byId('stockQtyInput').value = dealQty;
+  updateStockDetailUI();
+}
+
+// Покупка на максимум (до лимита в 100 шт.)
+function setDealMax() {
+  if (!activeStockId) return;
+  var s = state.stocks[activeStockId];
+  if (!s) return;
+  var maxBuyable = 100 - s.owned;
+  dealQty = Math.max(1, maxBuyable);
+  byId('stockQtyInput').value = dealQty;
+  updateStockDetailUI();
+}
+
+function updateStockDetailUI() {
+  if (!activeStockId) return;
+  var c = null;
+  for (var i = 0; i < companies.length; i++) {
+    if (companies[i].id === activeStockId) {
+      c = companies[i];
+      break;
+    }
+  }
+  if (!c) return;
+
+  var s = state.stocks[activeStockId];
+  if (!s) return;
+
+  byId('sdTitle').textContent = c.name.toUpperCase();
+  byId('sdOwned').textContent = s.owned + ' / 100 шт.';
+  byId('sdAvg').textContent = s.avgBuyPrice > 0 ? fmt(s.avgBuyPrice) + ' ₽' : '—';
+  byId('sdPrice').textContent = fmt(s.price) + ' ₽';
+  
+  byId('sdMaxPrice').textContent = fmt(s.maxPrice || s.price) + ' ₽';
+  byId('sdMinPrice').textContent = fmt(s.minPrice || s.price) + ' ₽';
+  
+  var totalDeal = dealQty * s.price;
+  byId('sdTotalDealCost').textContent = fmt(totalDeal) + ' ₽';
+
+  if (s.owned > 0) {
+    var diff = s.price - s.avgBuyPrice;
+    var totalProfitRub = diff * s.owned;
+    var pct = (diff / s.avgBuyPrice) * 100;
+    var color = pct >= 0 ? '#29dc78' : '#ff4e61';
+    var prefix = pct >= 0 ? '+' : '';
+    byId('sdProfit').textContent = prefix + pct.toFixed(1) + '% (' + prefix + fmt(totalProfitRub) + ' ₽)';
+    byId('sdProfit').style.color = color;
+  } else {
+    byId('sdProfit').textContent = '— (0 ₽)';
+    byId('sdProfit').style.color = '#aebbd0';
+  }
+}
+
+function buyStockAction() {
+  if (!activeStockId) return;
+  var s = state.stocks[activeStockId];
+  var cost = s.price * dealQty;
+  
+  if (s.owned + dealQty > 100) {
+    alert('Вы не можете купить больше 100 акций одной компании!');
+    return;
+  }
+  if (state.balance < cost) {
+    alert('Недостаточно денег на балансе для покупки!');
+    return;
+  }
+  
+  state.balance -= cost;
+  var currentTotalCost = s.owned * s.avgBuyPrice;
+  var newTotalCost = currentTotalCost + cost;
+  s.owned += dealQty;
+  s.avgBuyPrice = Math.round(newTotalCost / s.owned);
+  
+  sound(1000, 0.15, 'triangle');
+  updateStockDetailUI();
+  save();
+}
+
+function sellStockAction() {
+  if (!activeStockId) return;
+  var s = state.stocks[activeStockId];
+  if (s.owned < dealQty) {
+    alert('У вас нет такого количества акций для продажи!');
+    return;
+  }
+  
+  var revenue = s.price * dealQty;
+  state.balance += revenue;
+  s.owned -= dealQty;
+  
+  if (s.owned === 0) {
+    s.avgBuyPrice = 0;
+  }
+  
+  sound(1046, 0.12, 'sine');
+  updateStockDetailUI();
+  save();
+}
+
+// Постоянное и независимое колебание цен всех 15 акций с реалистичными лимитами
+function tickStockMarket() {
+  for (var i = 0; i < companies.length; i++) {
+    var c = companies[i];
+    var s = state.stocks[c.id];
+    if (!s) continue;
+
+    var basePrice = Math.round(c.cost * 0.1);
+    var rand = Math.random();
+
+    if (rand < 0.015) {
+      if (Math.random() < 0.5) {
+        s.price = Math.round(s.price * (0.92 - Math.random() * 0.05));
+      } else {
+        s.price = Math.round(s.price * (1.08 + Math.random() * 0.07));
+      }
+    } else {
+      var factor = 1 + (Math.random() * 0.040 - 0.018);
+      s.price = Math.round(s.price * factor);
+    }
+    
+    s.price = Math.max(Math.round(basePrice * 0.35), Math.min(Math.round(basePrice * 6.0), s.price));
+    
+    if (!s.maxPrice || s.price > s.maxPrice) s.maxPrice = s.price;
+    if (!s.minPrice || s.price < s.minPrice) s.minPrice = s.price;
+
+    s.history.push(s.price);
+    if (s.history.length > 25) {
+      s.history.shift();
+    }
+  }
+
+  // Колебания курса BMC (Крипта)
+  if (state.bmcPrice) {
+    var cryptoFactor = 1 + (Math.random() * 0.12 - 0.058); // Повышенная крипто-волатильность
+    state.bmcPrice = Math.max(1000, Math.round(state.bmcPrice * cryptoFactor));
+    state.bmcHistory.push(state.bmcPrice);
+    if (state.bmcHistory.length > 20) {
+      state.bmcHistory.shift();
+    }
+  }
+
+  updateStockUI();
+  updateCryptoDOM();
+}
+
+function updateStockUI() {
+  if (activePanelId === 'statusPanel') {
+    renderStockTabLists();
+  } else if (activePanelId === 'stockDetailPanel') {
+    updateStockDetailUI();
+  }
+}
+
+// Отрисовка безупречного сглаженного графика (Кривые Безье и Неоновое Сияние)
+function drawStockChart() {
+  var canvas = byId('stockCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  
+  var w = rect.width;
+  var h = rect.height;
+  
+  ctx.clearRect(0, 0, w, h);
+  
+  if (visualHistory.length < 2) return;
+  
+  var min = Math.min.apply(null, visualHistory);
+  var max = Math.max.apply(null, visualHistory);
+  if (min === max) {
+    min -= 10000;
+    max += 10000;
+  }
+  var pad = (max - min) * 0.12;
+  min -= pad;
+  max += pad;
+  
+  ctx.strokeStyle = '#ffffff04';
+  ctx.lineWidth = 1;
+  for (var i = 1; i < 4; i++) {
+    var lineY = (h / 4) * i;
+    ctx.beginPath();
+    ctx.moveTo(0, lineY);
+    ctx.lineTo(w, lineY);
+    ctx.stroke();
+  }
+  
+  var points = [];
+  var stepX = w / (visualHistory.length - 1);
+  for (var i = 0; i < visualHistory.length; i++) {
+    var pctY = (visualHistory[i] - min) / (max - min);
+    var ptY = h - (pctY * (h - 24) + 12);
+    points.push({ x: i * stepX, y: ptY });
+  }
+
+  var isUp = visualHistory[visualHistory.length - 1] >= (visualHistory[visualHistory.length - 2] || visualHistory[visualHistory.length - 1]);
+  var themeColor = isUp ? '#29dc78' : '#ff4e61';
+  var glowColor = isUp ? 'rgba(41, 220, 120, 0.45)' : 'rgba(255, 78, 97, 0.45)';
+  
+  ctx.beginPath();
+  ctx.moveTo(0, h);
+  ctx.lineTo(points[0].x, points[0].y);
+  for (var i = 0; i < points.length - 1; i++) {
+    var xc = (points[i].x + points[i + 1].x) / 2;
+    var yc = (points[i].y + points[i + 1].y) / 2;
+    ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+  }
+  ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+  ctx.lineTo(w, h);
+  ctx.closePath();
+  
+  var areaGrad = ctx.createLinearGradient(0, 0, 0, h);
+  areaGrad.addColorStop(0, isUp ? 'rgba(41, 220, 120, 0.18)' : 'rgba(255, 78, 97, 0.18)');
+  areaGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = areaGrad;
+  ctx.fill();
+  
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (var i = 0; i < points.length - 1; i++) {
+    var xc = (points[i].x + points[i + 1].x) / 2;
+    var yc = (points[i].y + points[i + 1].y) / 2;
+    ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+  }
+  ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+  
+  ctx.strokeStyle = themeColor;
+  ctx.lineWidth = 3;
+  ctx.shadowColor = glowColor;
+  ctx.shadowBlur = 10;
+  ctx.stroke();
+  
+  ctx.shadowBlur = 0;
+  
+  var lastPt = points[points.length - 1];
+  ctx.beginPath();
+  ctx.arc(lastPt.x, lastPt.y, 5, 0, 2 * Math.PI);
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = themeColor;
+  ctx.lineWidth = 2.5;
+  ctx.fill();
+  ctx.stroke();
+}
+
+// ----------------------------------------------------
+// МОДУЛЬ КРИПТО-ФЕРМЫ
+// ----------------------------------------------------
+function updateCryptoDOM() {
+  var totalRate = 0;
+  for (var i = 0; i < minersConfig.length; i++) {
+    var m = minersConfig[i];
+    var owned = state.bmcMiners[i] || 0;
+    totalRate += owned * m.rps;
+    
+    var dom = cryptoDomCache[i];
+    if (dom) {
+      dom.desc.textContent = '+' + m.rps + ' BMC/с · ' + owned + ' шт.';
+      dom.btn.textContent = fmt(m.cost) + ' ₽';
+      (function(index) {
+        dom.btn.onclick = function() { buyMiner(index); };
+      })(i);
+      
+      if (state.balance >= m.cost) dom.card.classList.remove('disabled');
+      else dom.card.classList.add('disabled');
+    }
+  }
+
+  if (byId('cryptoBmcBalance')) {
+    byId('cryptoBmcBalance').textContent = state.bmcBalance.toFixed(4) + ' BMC';
+  }
+  if (byId('cryptoMiningRate')) {
+    byId('cryptoMiningRate').textContent = totalRate.toFixed(4) + ' BMC/с';
+  }
+  if (byId('cryptoBmcPrice')) {
+    byId('cryptoBmcPrice').textContent = fmt(state.bmcPrice) + ' ₽';
+  }
+
+  var sellBtn = byId('cryptoSellBtn');
+  if (sellBtn) {
+    var currentWorth = state.bmcBalance * state.bmcPrice;
+    sellBtn.textContent = 'ОБМЕНЯТЬ ВСЕ НА ' + fmt(currentWorth) + ' ₽';
+    if (state.bmcBalance <= 0) {
+      sellBtn.classList.add('disabled');
+    } else {
+      sellBtn.classList.remove('disabled');
+    }
+  }
+}
+
+function buyMiner(index) {
+  var m = minersConfig[index];
+  if (state.balance < m.cost) return;
+  state.balance -= m.cost;
+  state.bmcMiners[index] = (state.bmcMiners[index] || 0) + 1;
+  sound(800, 0.12, 'triangle');
+  updateCryptoDOM();
+  save();
+}
+
+function sellAllBmc() {
+  if (state.bmcBalance <= 0) return;
+  var revenue = state.bmcBalance * state.bmcPrice;
+  state.balance += revenue;
+  state.bmcBalance = 0;
+  sound(1046, 0.15, 'sine');
+  updateCryptoDOM();
+  save();
+}
+
+// ----------------------------------------------------
+// ОСТАЛЬНОЙ ФУНКЦИОНАЛ ИГРЫ
+// ----------------------------------------------------
 function initAudio() {
   if (!audio) {
     var A = window.AudioContext || window.webkitAudioContext;
@@ -774,6 +1463,57 @@ function load() {
   state.equippedSkin = state.equippedSkin || 'default';
   state.ownedSkins = state.ownedSkins || ['default'];
   
+  // Инициализация структуры акций
+  if (!state.stocks) {
+    state.stocks = {};
+  }
+  for (var i = 0; i < companies.length; i++) {
+    var c = companies[i];
+    var basePrice = Math.round(c.cost * 0.1);
+    
+    if (!state.stocks[c.id]) {
+      state.stocks[c.id] = {
+        price: basePrice,
+        owned: 0,
+        avgBuyPrice: 0,
+        history: [basePrice, basePrice],
+        maxPrice: basePrice,
+        minPrice: basePrice
+      };
+    } else {
+      var s = state.stocks[c.id];
+      if (s.price < basePrice * 0.35) {
+        s.price = Math.round(basePrice * (0.8 + Math.random() * 0.4));
+        s.history = [s.price, s.price];
+      }
+      if (!s.maxPrice || s.maxPrice < s.price) s.maxPrice = s.price;
+      if (!s.minPrice || s.minPrice > s.price) s.minPrice = s.price;
+    }
+  }
+
+  // Мягкая миграция старых сохранений AppleStock
+  if (state.appleStock && state.stocks['company9']) {
+    state.stocks['company9'].price = state.appleStock.price;
+    state.stocks['company9'].owned = state.appleStock.owned;
+    state.stocks['company9'].avgBuyPrice = state.appleStock.avgBuyPrice;
+    state.stocks['company9'].history = state.appleStock.history;
+    delete state.appleStock;
+  }
+
+  // Инициализация данных Крипто-фермы
+  if (!state.bmcMiners) {
+    state.bmcMiners = [0, 0, 0, 0, 0];
+  }
+  if (state.bmcBalance === undefined) {
+    state.bmcBalance = 0;
+  }
+  if (!state.bmcPrice) {
+    state.bmcPrice = 50000;
+  }
+  if (!state.bmcHistory) {
+    state.bmcHistory = [50000, 50000];
+  }
+  
   if (state.levelClicks === undefined || state.levelClicks === null) {
     state.levelClicks = 0;
   }
@@ -822,12 +1562,20 @@ function tick() {
     }
   }
   state.lastSafe = now;
+
+  // Начисление крипты от майнеров
+  var totalMiningRate = 0;
+  for (var m = 0; m < minersConfig.length; m++) {
+    totalMiningRate += (state.bmcMiners[m] || 0) * minersConfig[m].rps;
+  }
+  state.bmcBalance += totalMiningRate;
   
   if (!state.pending && state.levelClicks >= state.levelClicksNeeded) {
     state.pending = true;
     state.pendingLevel = state.level + 1;
   }
   updateSafeText();
+  updateCryptoDOM();
 }
 
 function clickGame(e) {
@@ -862,7 +1610,6 @@ function clickGame(e) {
   }, 800);
 }
 
-// Перерисовка персонажа и фона без перезагрузки
 function renderFast() {
   updateVisuals();
   byId('tapValue').textContent = '+' + fmt(power(state.clickLevel)) + ' ₽';
@@ -879,7 +1626,7 @@ function renderHeaders() {
   var p = state.pending ? 'Забрать' : state.level + ' (' + pctVal + '%)';
   var m = fmt(state.balance) + ' ₽';
   
-  var panels = ['tap', 'business', 'company', 'status', 'skins', 'settings'];
+  var panels = ['tap', 'business', 'company', 'status', 'skins', 'settings', 'stockDetail', 'crypto'];
   for (var i = 0; i < panels.length; i++) {
     var x = panels[i];
     var a = byId(x + 'HeadLvl');
@@ -950,8 +1697,8 @@ function updateSafeText() {
   
   var collectBtn = byId('collectSafeBtn');
   if (collectBtn) {
-    if (cur <= 0) collectBtn.classList.add('disabled');
-    else collectBtn.classList.remove('disabled');
+    if (cur <= 0) collectBtn.className = 'disabled';
+    else collectBtn.className = '';
   }
 
   var fill = byId('safeBarFill');
@@ -1034,13 +1781,19 @@ function buySkin(index) {
   state.equippedSkin = s.id;
   sound(1000, 0.15, 'triangle');
   
-  renderFast(); // Мгновенно обновляем персонажа на экране
+  renderFast();
   updateStoreDOM();
   save();
 }
 
 function equipSkin(id) {
-  var s = skins.find(function(x) { return x.id === id; });
+  var s = null;
+  for (var i = 0; i < skins.length; i++) {
+    if (skins[i].id === id) {
+      s = skins[i];
+      break;
+    }
+  }
   if (!s) return;
   var isOwned = state.ownedSkins.indexOf(id) !== -1 || (s.cost === 0 && state.level >= s.levelReq);
   if (!isOwned) return;
@@ -1048,7 +1801,7 @@ function equipSkin(id) {
   state.equippedSkin = id;
   sound(700, 0.08, 'sine');
   
-  renderFast(); // Мгновенно обновляем персонажа на экране
+  renderFast();
   updateStoreDOM();
   save();
 }
@@ -1056,26 +1809,32 @@ function equipSkin(id) {
 function openPanel(id) {
   closePanels();
   var p = byId(id);
-  if (p) p.classList.add('open');
+  if (p) p.className = 'panel open';
   activePanelId = id;
   sound(700, 0.05, 'sine');
   setTimeout(updateClickBounds, 310);
+  
+  if (id === 'statusPanel') {
+    switchStockTab(currentStocksTab);
+  } else if (id === 'cryptoPanel') {
+    updateCryptoDOM();
+  }
 }
 
 function closePanels() {
   var list = document.querySelectorAll('.panel');
   for (var i = 0; i < list.length; i++) {
-    list[i].classList.remove('open');
+    list[i].className = 'panel';
   }
   activePanelId = null;
-  renderFast(); // Гарантированно обновляем визуальную часть при возврате на главный экран
+  renderFast();
   setTimeout(updateClickBounds, 310);
 }
 
 function openSafe() {
   updateSafeText();
   var modal = byId('safeModal');
-  if (modal) modal.classList.add('show');
+  if (modal) modal.className = 'modal show';
   sound(700, 0.06, 'sine');
 }
 
@@ -1091,7 +1850,7 @@ function collectSafe() {
 
 function closeModal(id) {
   var modal = byId(id);
-  if (modal) modal.classList.remove('show');
+  if (modal) modal.className = 'modal';
 }
 
 function openReward() {
@@ -1101,7 +1860,7 @@ function openReward() {
     txt.innerHTML = 'Новый уровень: <b>' + state.pendingLevel + '</b><br>Бонус (15%): <strong style="color:#29dc78;font-size:24px">+' + fmt(r) + ' ₽</strong>';
   }
   var modal = byId('rewardModal');
-  if (modal) modal.classList.add('show');
+  if (modal) modal.className = 'modal show';
   sound(900, 0.1, 'sine');
 }
 
@@ -1112,9 +1871,9 @@ function claimReward() {
   state.levelClicksNeeded = Math.floor(Math.random() * 101) + 170;
   state.pending = false;
   var modal = byId('rewardModal');
-  if (modal) modal.classList.remove('show');
+  if (modal) modal.className = 'modal';
   
-  renderFast(); // Мгновенно меняем фон и облик персонажа под новый уровень
+  renderFast();
   updateStoreDOM();
   save();
   sound(1046, 0.2, 'triangle');
@@ -1140,6 +1899,7 @@ byId('music').addEventListener('input', function(e) {
 });
 
 setInterval(tick, 1000);
+setInterval(tickStockMarket, 1500);
 setInterval(save, 5000);
 window.addEventListener('beforeunload', save);
 window.addEventListener('resize', updateClickBounds);
@@ -1163,7 +1923,7 @@ window.addEventListener('load', function() {
     if (intro) {
       intro.style.opacity = '0';
       setTimeout(function() {
-        intro.remove();
+        intro.parentNode.removeChild(intro);
         updateClickBounds();
       }, 800);
     }
